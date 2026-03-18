@@ -19,15 +19,10 @@ function resolveBaseUrl() {
 
   // 2) Local dev fallback
   if (typeof window !== "undefined" && window.location.hostname === "localhost") {
-    return "http://localhost:8000/api/v1";
+    return "/api/v1";
   }
 
-  // 3) Production fallback: same-origin (assumes reverse proxy)
-  if (typeof window !== "undefined") {
-    return `${window.location.origin}/api/v1`;
-  }
-
-  // 4) SSR build-time fallback
+  // 3) Production fallback: always hit the proxied path (Next.js rewrite)
   return "/api/v1";
 }
 
