@@ -1,11 +1,41 @@
 import axios from "axios";
 
-export const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_BASE_URL ?? "https://your-backend-url.com/api/v1";
+function resolveBaseUrl() {
+  const envUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+
+  // 1) If an env URL is provided and not the placeholder, use it
+  if (envUrl && !envUrl.includes("your-backend-url.com")) {
+    // But if we are in the browser on a non-localhost host and the env points to localhost,
+    // prefer same-origin to avoid unreachable calls / mixed content.
+    if (
+      typeof window !== "undefined" &&
+      window.location.hostname !== "localhost" &&
+      envUrl.includes("localhost")
+    ) {
+      return `${window.location.origin}/api/v1`;
+    }
+    return envUrl;
+  }
+
+  // 2) Local dev fallback
+  if (typeof window !== "undefined" && window.location.hostname === "localhost") {
+    return "http://localhost:8000/api/v1";
+  }
+
+  // 3) Production fallback: same-origin (assumes reverse proxy)
+  if (typeof window !== "undefined") {
+    return `${window.location.origin}/api/v1`;
+  }
+
+  // 4) SSR build-time fallback
+  return "/api/v1";
+}
+
+export const API_BASE_URL = resolveBaseUrl();
 
 export const api = axios.create({
   baseURL: API_BASE_URL,
-  withCredentials: true,
+  withCredentials: false,
   headers: {
     Accept: "application/json",
   },
