@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, User, Mail, Lock } from "lucide-react";
 import { useState } from "react";
 import React from "react";
+import { api, getApiErrorMessage } from "@/lib/api";
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -14,35 +15,33 @@ export function Navbar() {
     e.preventDefault();
     const formData = new FormData(e.target as HTMLFormElement);
     const data = {
-      full_name: formData.get('full_name'),
-      email: formData.get('email'),
-      password: formData.get('password'),
+      full_name: formData.get("full_name")?.toString() ?? "",
+      email: formData.get("email")?.toString() ?? "",
+      password: formData.get("password")?.toString() ?? "",
     };
 
-    const confirmPassword = formData.get('confirm_password');
+    const confirmPassword = formData.get("confirm_password")?.toString() ?? "";
     if (data.password !== confirmPassword) {
       alert('Passwords do not match!');
       return;
     }
 
     try {
-      const response = await fetch('http://localhost:8000/api/v1/auth/register', {
-        method: 'POST',
+      const response = await api.post('/auth/register', data, {
         headers: {
           'Content-Type': 'application/json',
+          Accept: 'application/json',
         },
-        body: JSON.stringify(data),
       });
 
-      if (response.ok) {
+      if (response.status >= 200 && response.status < 300) {
         alert('Registration successful! You can now login.');
         setIsRegisterModalOpen(false);
       } else {
-        const error = await response.json();
-        alert(`Registration failed: ${error.detail}`);
+        alert('Registration failed. Please try again.');
       }
     } catch (error) {
-      alert('Registration failed. Please try again.');
+      alert(getApiErrorMessage(error, 'Registration failed. Please try again.'));
     }
   };
 

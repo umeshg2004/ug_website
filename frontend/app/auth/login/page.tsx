@@ -6,7 +6,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { Navbar } from "@/components/navbar";
-import { api, setAuthToken } from "@/lib/api";
+import { api, getApiErrorMessage, setAuthToken } from "@/lib/api";
 import { motion } from "framer-motion";
 import { Eye, EyeOff, Mail, Lock, ArrowRight } from "lucide-react";
 
@@ -34,7 +34,10 @@ export default function LoginPage() {
       form.append("username", data.email);
       form.append("password", data.password);
       const res = await api.post("/auth/login", form, {
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          Accept: "application/json",
+        },
       });
       const token = res.data.access_token as string;
       setAuthToken(token);
@@ -61,7 +64,7 @@ export default function LoginPage() {
           router.push("/dashboard/admin"); // fallback
       }
     } catch (e: any) {
-      setError(e?.response?.data?.detail ?? "Login failed");
+      setError(getApiErrorMessage(e, "Login failed. Please try again."));
     }
   };
 

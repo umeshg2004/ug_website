@@ -6,7 +6,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { Navbar } from "@/components/navbar";
-import { api } from "@/lib/api";
+import { api, getApiErrorMessage } from "@/lib/api";
 import { motion } from "framer-motion";
 import { Eye, EyeOff, Mail, Lock, User, ArrowRight } from "lucide-react";
 
@@ -31,16 +31,20 @@ export default function RegisterPage() {
   const onSubmit = async (data: FormValues) => {
     setError(null);
     try {
-      const response = await api.post("/auth/register", data);
+      const response = await api.post("/auth/register", data, {
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+      });
       console.log("Registration successful:", response.data);
       router.push("/auth/login");
     } catch (e: any) {
       console.error("Registration error:", e);
-      console.error("Error response:", e?.response?.data);
-      const errorMessage = 
-        e?.response?.data?.detail || 
-        e?.message || 
-        "Registration failed. Please try again or contact support.";
+      const errorMessage = getApiErrorMessage(
+        e,
+        "Registration failed. Please try again or contact support."
+      );
       setError(errorMessage);
     }
   };
