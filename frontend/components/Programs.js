@@ -139,39 +139,41 @@ export function Programs() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 viewport={{ once: true }}
-                className="bg-slate-950 rounded-2xl p-6 border border-slate-800 hover:border-slate-700 transition-all duration-300 group"
+                className="bg-slate-950 rounded-2xl p-6 border border-slate-800 hover:border-slate-700 transition-all duration-300 group flex flex-col"
               >
-                <div
-                  className={`bg-gradient-to-br ${program.color} w-16 h-16 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}
-                >
-                  <Icon className="w-8 h-8 text-white" />
-                </div>
-
-                <h3 className="text-2xl font-bold text-white mb-3">{program.title}</h3>
-                <p className="text-slate-300 mb-6 leading-relaxed">{program.description}</p>
-
-                <ul className="space-y-2 mb-6">
-                  {program.features.map((feature, idx) => (
-                    <li key={idx} className="flex items-center text-sm text-slate-400">
-                      <div className="w-1.5 h-1.5 bg-yellow-400 rounded-full mr-3" />
-                      {feature}
-                    </li>
-                  ))}
-                </ul>
-
-                <div className="space-y-2 mb-6">
-                  <div className="flex justify-between text-sm">
-                    <span className="text-slate-400">Duration:</span>
-                    <span className="text-white font-semibold">{program.duration}</span>
+                <div className="flex-1">
+                  <div
+                    className={`bg-gradient-to-br ${program.color} w-16 h-16 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}
+                  >
+                    <Icon className="w-8 h-8 text-white" />
                   </div>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-slate-400">Price:</span>
-                    <span className="text-yellow-400 font-bold">{program.price}</span>
+
+                  <h3 className="text-2xl font-bold text-white mb-3">{program.title}</h3>
+                  <p className="text-slate-300 mb-6 leading-relaxed">{program.description}</p>
+
+                  <ul className="space-y-2 mb-6">
+                    {program.features.map((feature, idx) => (
+                      <li key={idx} className="flex items-center text-sm text-slate-400">
+                        <div className="w-1.5 h-1.5 bg-yellow-400 rounded-full mr-3" />
+                        {feature}
+                      </li>
+                    ))}
+                  </ul>
+
+                  <div className="space-y-2 mb-6">
+                    <div className="flex justify-between text-sm">
+                      <span className="text-slate-400">Duration:</span>
+                      <span className="text-white font-semibold">{program.duration}</span>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span className="text-slate-400">Price:</span>
+                      <span className="text-yellow-400 font-bold">{program.price}</span>
+                    </div>
                   </div>
                 </div>
 
                 <button
-                  className="w-full bg-gradient-to-r from-yellow-400 to-orange-500 text-slate-900 py-3 rounded-xl font-bold hover:shadow-lg hover:scale-105 transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-60"
+                  className="w-full bg-gradient-to-r from-yellow-400 to-orange-500 text-slate-900 py-3 rounded-xl font-bold hover:shadow-lg hover:scale-105 transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-60 mt-auto"
                   onClick={() => openForm(program)}
                   disabled={loadingProgram === program.title}
                 >
