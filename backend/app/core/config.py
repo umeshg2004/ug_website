@@ -40,9 +40,7 @@ class Settings(BaseSettings):
     SMTP_FROM: str = "noreply@sportsacademy.com"
 
     # Database
-    SQLALCHEMY_DATABASE_URI: str = (
-        "postgresql+psycopg2://postgres:postgres@db:5432/sports_academy"
-    )
+    SQLALCHEMY_DATABASE_URI: str = "sqlite:///./app.db"
 
     class Config:
         env_file = ".env"
